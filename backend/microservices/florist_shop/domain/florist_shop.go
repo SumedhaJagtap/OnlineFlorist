@@ -6,7 +6,7 @@ type floristshop struct {
           Name         string  `json:"name" bson:"name"`
           Address      string  `json:"address" bson:"address"`
           AddressLine2 string  `json:"addressLine2" bson:"addressLine2"`
-          email          string  `json:"email" bson:"email"`
+          Email          string  `json:"email" bson:"email"`
           Postcode     string  `json:"postcode" bson:"postcode"`
           Phone   string  `json:"phone" bson:"phone"`
 }        
