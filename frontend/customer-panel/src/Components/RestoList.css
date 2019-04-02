@@ -1,0 +1,16 @@
+.resto-list{
+    display: grid;
+    grid-template-columns: repeat(2,minmax(250px,1fr));
+    grid-gap: 15px;
+    /* input-width:10px; */
+    /* left:50px; */
+    /* top: 150px; */
+    /* color: orange; */
+    /* grid-auto-rows: 150px; */
+}
+
+.resto-list img{
+    width: 200px;
+    grid-row-end: span 2;
+}
+
