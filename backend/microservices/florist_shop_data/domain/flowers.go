@@ -1,4 +1,5 @@
 package domain
+import  shop "OnlineFlorist/backend/microservices/florist_shop/domain"
   
 //customer is a domain object
 type  flower struct {
@@ -7,5 +8,6 @@ type  flower struct {
           Qty     int  `json:"qty" bson:"qty"`
           Rating     int  `json:"rating" bson:"rating"`
           Photo         string  `json:"photo" bson:"photo"`
+          ShopID         shop.ID      `json:"_shopid" bson:"_shopid"`
 
 }        
