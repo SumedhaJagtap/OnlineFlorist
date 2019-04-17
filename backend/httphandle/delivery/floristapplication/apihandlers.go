@@ -34,20 +34,20 @@ func shop_item_handler() *floristshopitemscrudhandler.DbCrudHandler {
 }
 
 func main() {
-	// shop_item_hndlr := shop_item_handler()
-	// shop_item_pingHandler := &handlerlib.PingHandler{}
-	// logger.Println("Setting up resources.")
-	// logger.Println("Starting service")
-	// h1 := mux.NewRouter()
-	// h1.Handle("/ping/", shop_item_pingHandler)
-	// h1.Handle("/restaurantservice/restaurant/", shop_item_hndlr)
+	shop_item_hndlr := shop_item_handler()
+	shop_item_pingHandler := &handlerlib.PingHandler{}
+	logger.Println("Setting up resources.")
+	logger.Println("Starting service")
+	h1 := mux.NewRouter()
+	h1.Handle("/ping/", shop_item_pingHandler)
+	h1.Handle("/onlineflorist/shopitems/", shop_item_hndlr)
 	// logger.Println("Resource Setup Done.")
 	// logger.Println(http.ListenAndServe(":8080", h1))
 
 	shop_hndlr := shop_handler()
 	shop_pingHandler := &handlerlib.PingHandler{}
-	logger.Println("Setting up resources.")
-	logger.Println("Starting service")
+	// logger.Println("Setting up resources.")
+	// logger.Println("Starting service")
 	h2 := mux.NewRouter()
 	h2.Handle("/ping/", shop_pingHandler)
 	h2.Handle("/onlineflorist/shop/", shop_hndlr)
