@@ -1,10 +1,14 @@
 package usercrudhandler
 
+import "OnlineFlorist/backend/microservices/customer/domain"
+
 type UserGetRespDTO struct {
-	ID        string `json:"id"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Age       int    `json:"age"`
+	CustID    domain.ID `json:"_custid"`
+	Email     string    `json:"email"`
+	Phone     string    `json:"phone"`
+	FirstName string    `json:"firstName"`
+	LastName  string    `json:"lastName"`
+	// Age       int    `json:"age"`
 	CreatedOn uint64 `json:"createdOn"`
 }
 
@@ -14,9 +18,9 @@ type UserGetListRespDTO struct {
 }
 
 type UserCreateRespDTO struct {
-	ID string `json:"id"`
+	CustID domain.ID `json:"_custid"`
 }
 
 type UserUpdateRespDTO struct {
-	ID string `json:"id"`
+	CustID domain.ID `json:"_custid"`
 }

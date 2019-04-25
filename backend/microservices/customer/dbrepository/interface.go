@@ -1,35 +1,20 @@
 package dbrepository
 
-import "mongorestaurantsample/domain"
+import "OnlineFlorist/backend/microservices/customer/domain"
 
-//Reader read from db
 type Reader interface {
-	Get(id domain.ID) (*domain.Restaurant, error)
-	GetAll() ([]*domain.Restaurant, error)
-	//Regex Substring Match on the name field
-	FindByName(name string) ([]*domain.Restaurant, error)
+	GetAll() ([]*domain.Customer, error)
+	GetByID(ID domain.ID) (*domain.Customer, error)
 }
 
-//Writer  write to db
 type Writer interface {
-	//Create Or update
-	Create(b *domain.Restaurant) (domain.ID, error)
-	Store(b *domain.Restaurant) (domain.ID, error)
-	Delete(id domain.ID) error
+	Create(*domain.Customer) (domain.ID, error)
+	Update(*domain.Customer) error
+	Delete(domain.ID) error
+	//Archive(*domain.User) error
 }
 
-//Filter Find objects by additional filters
-type Filter interface {
-	FindByTypeOfFood(foodType string) ([]*domain.Restaurant, error)
-	FindByTypeOfPostCode(postCode string) ([]*domain.Restaurant, error)
-	//Search --> across all string fields regex match with case insensitive
-	//substring match accross all string fields
-	Search(query string) ([]*domain.Restaurant, error)
-}
-
-//Repository db interface
 type Repository interface {
 	Reader
 	Writer
-	Filter
 }

@@ -7,11 +7,15 @@ import (
 	logger "log"
 	"net/http"
 
-	"gohttpexamples/sample4/dbrepo/userrepo"
-	customerrors "gohttpexamples/sample4/delivery/restapplication/packages/errors"
-	"gohttpexamples/sample4/delivery/restapplication/packages/httphandlers"
-	mthdroutr "gohttpexamples/sample4/delivery/restapplication/packages/mthdrouter"
-	"gohttpexamples/sample4/delivery/restapplication/packages/resputl"
+	customerrors "OnlineFlorist/backend/httphandle/delivery/floristapplication/packages/errors"
+	mthdroutr "OnlineFlorist/backend/httphandle/delivery/floristapplication/packages/mthdrouter"
+	userrepo "OnlineFlorist/backend/microservices/customer/dbrepository"
+	"OnlineFlorist/backend/microservices/customer/domain"
+
+	// customerrors "gohttpexamples/sample4/delivery/restapplication/packages/errors"
+	"OnlineFlorist/backend/httphandle/delivery/floristapplication/packages/httphandlers"
+	// mthdroutr "gohttpexamples/sample4/delivery/restapplication/packages/mthdrouter"
+	"OnlineFlorist/backend/httphandle/delivery/floristapplication/packages/resputl"
 
 	"github.com/gorilla/mux"
 )
@@ -34,7 +38,7 @@ func (p *UserCrudHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (p *UserCrudHandler) Get(r *http.Request) resputl.SrvcRes {
 	pathParam := mux.Vars(r)
 
-	usID := pathParam["id"]
+	usID := pathParam["_custid"]
 	if usID == "" {
 		logger.Printf("%s", pathParam)
 		//return resputl.Response200OK(generateSampleResponseObj())
@@ -48,18 +52,20 @@ func (p *UserCrudHandler) Get(r *http.Request) resputl.SrvcRes {
 
 		return resputl.Response200OK(responseObj)
 	} else {
-		obj, err := p.usersvc.GetByID(usID)
+		obj, err := p.usersvc.GetByID(domain.ID(usID))
 
 		if err != nil {
 			return resputl.ProcessError(customerrors.NotFoundError("User Object Not found"), "")
 		}
 
 		userObj := UserGetRespDTO{
-			ID:        obj.ID,
-			FirstName: obj.Firstname,
-			LastName:  obj.Lastname,
+			CustID:    obj.CustID,
+			Email:     obj.Email,
+			Phone:     obj.Phone,
+			FirstName: obj.FirstName,
+			LastName:  obj.LastName,
 			CreatedOn: obj.CreatedOn,
-			Age:       obj.Age,
+			// Age:       obj.Age,
 		}
 
 		return resputl.Response200OK(userObj)
@@ -90,7 +96,7 @@ func (p *UserCrudHandler) Post(r *http.Request) resputl.SrvcRes {
 	}
 
 	f := userrepo.Factory{}
-	userObj := f.NewUser(requestdata.FirstName, requestdata.LastName, requestdata.Age)
+	userObj := f.NewCustomerDTO(requestdata.Email, requestdata.Phone, requestdata.FirstName, requestdata.LastName)
 	id, err := p.usersvc.Create(userObj)
 	//fmt.Println("POST:", id)
 	if err != nil {
@@ -98,7 +104,7 @@ func (p *UserCrudHandler) Post(r *http.Request) resputl.SrvcRes {
 		return resputl.ProcessError(customerrors.UnprocessableEntityError("Error in writing to DB"), "")
 	}
 
-	return resputl.Response200OK(&UserCreateRespDTO{ID: id})
+	return resputl.Response200OK(&UserCreateRespDTO{CustID: id})
 }
 
 //Put method modifies temporary schedule contents
@@ -124,7 +130,7 @@ func (p *UserCrudHandler) Put(r *http.Request) resputl.SrvcRes {
 
 	f := userrepo.Factory{}
 	fmt.Println("ID : ", requestdata)
-	userObj := f.UpdateUser(requestdata.ID, requestdata.FirstName, requestdata.LastName, requestdata.Age, requestdata.CreatedOn)
+	userObj := f.UpdateCustomerDTO(requestdata.CustID, requestdata.Email, requestdata.Phone, requestdata.FirstName, requestdata.LastName, requestdata.CreatedOn)
 	fmt.Println("user obj:", userObj)
 	err = p.usersvc.Update(userObj)
 	if err != nil {
@@ -157,9 +163,9 @@ func (p *UserCrudHandler) Delete(r *http.Request) resputl.SrvcRes {
 
 	f := userrepo.Factory{}
 	fmt.Println("ID : ", requestdata)
-	userObj := f.UpdateUser(requestdata.ID, requestdata.FirstName, requestdata.LastName, requestdata.Age, requestdata.CreatedOn)
+	userObj := f.UpdateCustomerDTO(requestdata.CustID, requestdata.Email, requestdata.Phone, requestdata.FirstName, requestdata.LastName, requestdata.CreatedOn)
 	fmt.Println("user obj:", userObj)
-	err = p.usersvc.Delete(userObj)
+	err = p.usersvc.Delete(userObj.CustID)
 	if err != nil {
 		logger.Printf("PUT : Error while creating in DB: %s", err)
 		return resputl.ProcessError(customerrors.UnprocessableEntityError("Error in writing to DB"), "")

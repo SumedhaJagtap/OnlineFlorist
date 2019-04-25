@@ -1,50 +1,59 @@
 package dbrepository
 
 import (
-	"mongorestaurantsample/domain"
+	"OnlineFlorist/backend/microservices/customer/domain"
 )
 
-type DBService struct {
+type Service struct {
 	repo Repository
 }
 
-func NewDBService(repo Repository) *DBService {
-	return &DBService{repo: repo}
+func NewService(repo Repository) *Service {
+	return &Service{repo: repo}
 }
 
-func (s *DBService) Create(b *domain.Restaurant) (domain.ID, error) {
-	return s.repo.Create(b)
-}
+// type DbService struct {
+// 	dbrepo dbrepo.Repository
+// }
 
-func (s *DBService) Get(id domain.ID) (*domain.Restaurant, error) {
-	return s.repo.Get(id)
+// func NewDbService(dbrepo dbrepo.Repository) *Service {
+// 	return &Service{repo: dbrepo}
+// }
 
-}
+// type Reader interface {
+// 	GetAll() ([]*domain.User, error)
+// 	GetByID() (*domain.User, error)
+// }
 
-func (s *DBService) GetAll() ([]*domain.Restaurant, error) {
+// type Writer interface {
+// 	Create(*domain.User) (string, error)
+// 	Update(*domain.User) error
+// 	Archive(*domain.User) error
+// }
+
+func (s *Service) GetAll() ([]*domain.Customer, error) {
 	return s.repo.GetAll()
 }
 
-func (s *DBService) FindByName(name string) ([]*domain.Restaurant, error) {
-	return s.repo.FindByName(name)
+func (s *Service) GetByID(ID domain.ID) (*domain.Customer, error) {
+	return s.repo.GetByID(ID)
 }
 
-func (s *DBService) Store(b *domain.Restaurant) (domain.ID, error) {
-	return s.repo.Store(b)
+func (s *Service) Create(u *domain.Customer) (domain.ID, error) {
+	// u.CustID = utils.NewUUID()
+	// u.CreatedOn = utils.GetUTCTimeNow()
+	return s.repo.Create(u)
+
 }
 
-func (s *DBService) Delete(id domain.ID) error {
+func (s *Service) Update(inp *domain.Customer) error {
+
+	//inp.UpdatedOn = utils.GetUTCTImeNow()
+	return s.repo.Update(inp)
+}
+
+func (s *Service) Delete(id domain.ID) error {
+
+	//inp.UpdatedOn = utils.GetUTCTImeNow()
 	return s.repo.Delete(id)
-}
-
-func (s *DBService) FindByTypeOfFood(foodType string) ([]*domain.Restaurant, error) {
-	return s.repo.FindByTypeOfFood(foodType)
-}
-
-func (s *DBService) FindByTypeOfPostCode(postCode string) ([]*domain.Restaurant, error) {
-	return s.repo.FindByTypeOfPostCode(postCode)
-}
-
-func (s *DBService) Search(query string) ([]*domain.Restaurant, error) {
-	return s.repo.Search(query)
 }

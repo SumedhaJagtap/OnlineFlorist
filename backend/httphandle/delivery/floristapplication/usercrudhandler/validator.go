@@ -5,7 +5,7 @@ import (
 	"fmt"
 	logger "log"
 
-	customerrors "gohttpexamples/sample4/delivery/restapplication/packages/errors"
+	customerrors "OnlineFlorist/backend/httphandle/delivery/floristapplication/packages/errors"
 
 	"github.com/xeipuuv/gojsonschema"
 )
@@ -27,16 +27,16 @@ func ValidateUserCreateUpdateRequest(rStr string) (bool, error) {
 			"minLength": 1,
 			"maxLength": 20
 		  },
-		  "age": {
-            "type": "integer",
+		  "email": {
+            "type": "string",
 			"minimum": 1,
 			"maximum": 120
 		  }
 		},
 		"required": [
+		  "email",
 		  "firstName",
-		  "lastName",
-		  "age"
+		  "lastName"
 		]
 	  }`
 

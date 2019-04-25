@@ -1,15 +1,17 @@
 package usercrudhandler
 
-import "gohttpexamples/sample4/domain"
+import "OnlineFlorist/backend/microservices/customer/domain"
 
-func transformobjListToResponse(resp []*domain.User) UserGetListRespDTO {
+func transformobjListToResponse(resp []*domain.Customer) UserGetListRespDTO {
 	responseObj := UserGetListRespDTO{}
 	for _, obj := range resp {
 		userObj := UserGetRespDTO{
-			ID:        obj.ID,
-			FirstName: obj.Firstname,
-			LastName:  obj.Lastname,
-			Age:       obj.Age,
+			CustID:    obj.CustID,
+			Email:     obj.Email,
+			Phone:     obj.Phone,
+			FirstName: obj.FirstName,
+			LastName:  obj.LastName,
+			// Age:       obj.Age,
 			CreatedOn: obj.CreatedOn,
 		}
 		responseObj.Users = append(responseObj.Users, userObj)

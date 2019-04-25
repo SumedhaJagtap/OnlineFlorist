@@ -21,6 +21,7 @@ var collectionName = "customer"
 
 //NewMongoRepository create new repository
 func NewMongoRepository(mongoSession *mgo.Session, db string) *MongoRepository {
+	fmt.Println("IKDE ALA")
 	return &MongoRepository{
 		mongoSession: mongoSession,
 		db:           db,
@@ -63,12 +64,12 @@ func (r *MongoRepository) Insert(filename string) (int, error) {
 }
 
 //Find a Restaurant(reader)
-func (r *MongoRepository) Get(id domain.ID) (*domain.Customer, error) {
+func (r *MongoRepository) GetByID(id domain.ID) (*domain.Customer, error) {
 	result := domain.Customer{}
 	session := r.mongoSession.Clone()
 	defer session.Close()
 	coll := session.DB(r.db).C(collectionName)
-	err := coll.Find(bson.M{"_id": id}).One(&result)
+	err := coll.Find(bson.M{"_custid": id}).One(&result)
 	switch err {
 	case nil:
 		return &result, nil
@@ -133,6 +134,21 @@ func (r *MongoRepository) Store(b *domain.Customer) (domain.ID, error) {
 	return b.CustID, nil
 }
 
+func (r *MongoRepository) Update(b *domain.Customer) error {
+	session := r.mongoSession.Clone()
+	defer session.Close()
+	coll := session.DB(r.db).C(collectionName)
+	if domain.ID(0) == b.CustID {
+		b.CustID = domain.NewID()
+	}
+	_, err := coll.UpsertId(b.CustID, b)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 //Delete a Restaurant record(writer)
 func (r *MongoRepository) Delete(id domain.ID) error {
 	session := r.mongoSession.Clone()
@@ -150,12 +166,12 @@ func (r *MongoRepository) Delete(id domain.ID) error {
 }
 
 //Find a Restaurant By Type Of Food(filter)
-func (r *MongoRepository) FindByTypeOfFood(foodtype string) ([]*domain.Customer, error) {
+func (r *MongoRepository) FindByItemCategory(ItemCategory string) ([]*domain.Customer, error) {
 	result := []*domain.Customer{}
 	session := r.mongoSession.Clone()
 	defer session.Close()
 	coll := session.DB(r.db).C(collectionName)
-	err := coll.Find(bson.M{"type_of_food": foodtype}).All(&result)
+	err := coll.Find(bson.M{"category": ItemCategory}).All(&result)
 	switch err {
 	case nil:
 		return result, nil
@@ -167,12 +183,12 @@ func (r *MongoRepository) FindByTypeOfFood(foodtype string) ([]*domain.Customer,
 }
 
 //Find a Restaurant By Type Of Post Code(filter)
-func (r *MongoRepository) FindByTypeOfPostCode(postcode string) ([]*domain.Customer, error) {
+func (r *MongoRepository) FindByPostCode(postcode string) ([]*domain.Customer, error) {
 	result := []*domain.Customer{}
 	session := r.mongoSession.Clone()
 	defer session.Close()
 	coll := session.DB(r.db).C(collectionName)
-	err := coll.Find(bson.M{"postcode": postcode}).All(result)
+	err := coll.Find(bson.M{"postcode": postcode}).All(&result)
 
 	switch err {
 	case nil:
