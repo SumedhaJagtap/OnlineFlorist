@@ -25,7 +25,14 @@
     
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
-    <link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/style.css">
+		
+		<script>
+			function checkConnection(){
+			if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+    		alert("It's a local server!");
+			}
+		</script>
   </head>
   <body>
     
@@ -44,14 +51,14 @@
 	        	<li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
 	        	<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
 	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-	          <li class="nav-item cta"><a href="#" class="nav-link"><span>Login</span></a></li>
-	          <li class="nav-item cta"><a href="#" class="nav-link"><span>Sign Up</span></a></li>
+	          <li class="nav-item cta"><a href="../../web/index.html" class="nav-link"><span>Login</span></a></li>
+	          <li class="nav-item cta"><a href="../../reg/index.html" class="nav-link"><span>Sign Up</span></a></li>
 	        </ul>
 	      </div>
 	    </div>
 	  </nav>
     <!-- END nav -->
-    
+    checkConnection();
     <section class="home-slider owl-carousel">
       <div class="slider-item">
       	<div class="overlay"></div>
